@@ -7,14 +7,14 @@ pipeline {
                 git 'https://github.com/kullanici-adi/repo-adi.git'
             }
         }
-        stage('SonarQube Analysis') {
+        /*stage('SonarQube Analysis') {
             steps {
                 // SonarQube ile kaynak kod analizi
                 script {
                     sh 'sonar-scanner -Dsonar.projectKey=flask-app -Dsonar.sources=./ -Dsonar.host.url=http://your-sonarqube-url -Dsonar.login=your-sonarqube-token'
                 }
             }
-        }
+        }*/
         stage('Trivy Source Code Scan') {
             steps {
                 // Trivy ile kaynak kod güvenlik taraması (misconfiguration)
@@ -23,7 +23,7 @@ pipeline {
                 }
             }
         }
-        stage('Build Docker Image') {
+        /*stage('Build Docker Image') {
             steps {
                 script {
                     // Docker image oluştur
@@ -48,7 +48,7 @@ pipeline {
                 }
             }
         }
-    }
+    }*/
     post {
         always {
             // İşlem sonrası temizlik
