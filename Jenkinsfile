@@ -1,13 +1,10 @@
 pipeline {
     agent any
 
-    environment{
+    /*environment{
         SONARQUBE_TOKEN = credentials('sonartoken')
-    }
+    }*/
     
-    tools {
-        sonarScanner 'sonar-scanner-tool'  // Global Tool Configuration'da tanımlanan SonarQube Scanner adı
-    }
     stages {
         stage('Checkout') {
             steps {
@@ -18,15 +15,18 @@ pipeline {
         stage('SonarQube Code Scan') {
             steps {
                 script {
-                    // SonarQube ortam değişkenini kullanarak kaynak kodu analiz et
-                    withSonarQubeEnv('sonarqube-1') {  // 'SonarQube', Jenkins'teki SonarQube server ayarlarının ismi
-                        sh """
-                        sonar-scanner \
+                    environment {
+                        scannerHome = tool 'sonar-scanner-tool';
+                    }
+                    withSonarQubeEnv(installationName: 'sonarqube-1', credentialsId: 'sonartoken') {  // 'SonarQube', Jenkins'teki SonarQube server ayarlarının ismi
+                       sh "${scannerHome}/bin/sonar-scanner"
+                       /*sh """
+                        ${scannerHome}/bin/sonar-scanner \
                           -Dsonar.projectKey=my_project_key \
                           -Dsonar.sources=. \
                           -Dsonar.host.url=http://192.168.133:9000 \
                           -Dsonar.login=${SONARQUBE_TOKEN}
-                        """
+                        """*/
                     }
                 }
             }
