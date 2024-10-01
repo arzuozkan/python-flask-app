@@ -18,11 +18,7 @@ pipeline {
             }
             steps {
               withSonarQubeEnv(credentialsId: 'sonartoken', installationName: 'sonarqube-1') {
-                sh """
-                ${scannerHome}/bin/sonar-scanner\
-                      -Dsonar.projectKey=my_project_key \  # Projeyi tanımlayan benzersiz anahtar
-                      -Dsonar.sources=. \                 # Kaynak kod dizini
-                """
+                sh "${scannerHome}/bin/sonar-scanner"
               }
             }
         }
