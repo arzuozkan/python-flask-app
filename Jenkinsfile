@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv(installationName: 'sonarqube-1', credentialsId: 'sonartoken') {  // 'SonarQube', Jenkins'teki SonarQube server ayarlarının ismi
-                       sh "sonarqube-1"
+                       sh "sonar-scanner-tool"
                        /*sh """
                         ${scannerHome}/bin/sonar-scanner \
                           -Dsonar.projectKey=my_project_key \
