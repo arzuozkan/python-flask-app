@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment{
+        SONARQUBE_TOKEN = credentials('sonartoken')
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -7,14 +10,22 @@ pipeline {
                 git 'https://github.com/arzuozkan/python-flask-app'
             }
         }
-        /*stage('SonarQube Analysis') {
+        stage('SonarQube Code Scan') {
             steps {
-                // SonarQube ile kaynak kod analizi
                 script {
-                    sh 'sonar-scanner -Dsonar.projectKey=flask-app -Dsonar.sources=./ -Dsonar.host.url=http://your-sonarqube-url -Dsonar.login=your-sonarqube-token'
+                    // SonarQube ortam değişkenini kullanarak kaynak kodu analiz et
+                    withSonarQubeEnv('SonarQube') {  // 'SonarQube', Jenkins'teki SonarQube server ayarlarının ismi
+                        sh """
+                        sonar-scanner \
+                          -Dsonar.projectKey=my_project_key \
+                          -Dsonar.sources=. \
+                          -Dsonar.host.url=http://192.168.133:9000 \
+                          -Dsonar.login=${SONARQUBE_TOKEN}
+                        """
+                    }
                 }
             }
-        }*/
+        }
         stage('Trivy Source Code Scan') {
             steps {
                 // Trivy ile kaynak kod güvenlik taraması (misconfiguration)
@@ -23,23 +34,35 @@ pipeline {
                 }
             }
         }
-        /*stage('Build Docker Image') {
+        stage('Build Docker Image') {
             steps {
                 script {
                     // Docker image oluştur
-                    sh 'docker build -t flask-app:latest .'
+                    sh 'docker build -t my-flask-app:latest .'
                 }
             }
         }
+        /*stage('Push to Docker Hub') {
+            steps {
+                echo 'Pushing to Docker Hub'
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh '''
+                    echo "${PASS}" | docker login --username "${USER}" --password-stdin
+                    docker tag flask-monitoring ${USER}/flask-monitoring:latest
+                    docker push ${USER}/flask-monitoring:latest
+                    '''
+                }
+            }
+        }*/
         stage('Trivy Image Scan') {
             steps {
                 // Trivy ile imaj taraması
                 script {
-                    sh 'trivy image --exit-code 1 flask-app:latest'
+                    sh 'trivy image --exit-code 1 my-flask-app:latest'
                 }
             }
         }
-        stage('Deploy to Kubernetes') {
+        /*stage('Deploy to Kubernetes') {
             steps {
                 script {
                     // Kubernetes'e deploy et
