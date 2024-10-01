@@ -47,8 +47,8 @@ pipeline {
                     sh 'kubectl apply -f k8s/service.yaml'
                 }
             }
-        }
-    }*/
+        }*/
+    }
     post {
         always {
             // İşlem sonrası temizlik
