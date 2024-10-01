@@ -4,7 +4,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // GitHub'dan kodu çek
-                git 'https://github.com/kullanici-adi/repo-adi.git'
+                git 'https://github.com/arzuozkan/python-flask-app'
             }
         }
         /*stage('SonarQube Analysis') {
