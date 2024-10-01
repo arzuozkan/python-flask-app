@@ -13,19 +13,13 @@ pipeline {
             }
         }
         stage('SonarQube Code Scan') {
+            environment {
+                scannerHome = tool 'sonar-scanner-tool';
+            }
             steps {
-                script {
-                    withSonarQubeEnv(installationName: 'sonarqube-1', credentialsId: 'sonartoken') {  // 'SonarQube', Jenkins'teki SonarQube server ayarlarının ismi
-                       sh "sonar-scanner-tool"
-                       /*sh """
-                        ${scannerHome}/bin/sonar-scanner \
-                          -Dsonar.projectKey=my_project_key \
-                          -Dsonar.sources=. \
-                          -Dsonar.host.url=http://192.168.133:9000 \
-                          -Dsonar.login=${SONARQUBE_TOKEN}
-                        """*/
-                    }
-                }
+              withSonarQubeEnv(credentialsId: 'sonartoken', installationName: 'sonarqube-1') {
+                sh "${scannerHome}/bin/sonar-scanner"
+              }
             }
         }
         stage('Trivy Source Code Scan') {
