@@ -1,7 +1,12 @@
 pipeline {
     agent any
+
     environment{
         SONARQUBE_TOKEN = credentials('sonartoken')
+    }
+    
+    tools {
+        sonarScanner 'sonar-scanner-tool'  // Global Tool Configuration'da tanımlanan SonarQube Scanner adı
     }
     stages {
         stage('Checkout') {
@@ -14,7 +19,7 @@ pipeline {
             steps {
                 script {
                     // SonarQube ortam değişkenini kullanarak kaynak kodu analiz et
-                    withSonarQubeEnv(credentialsId: 'sonartoken') {  // 'SonarQube', Jenkins'teki SonarQube server ayarlarının ismi
+                    withSonarQubeEnv('sonarqube-1') {  // 'SonarQube', Jenkins'teki SonarQube server ayarlarının ismi
                         sh """
                         sonar-scanner \
                           -Dsonar.projectKey=my_project_key \
