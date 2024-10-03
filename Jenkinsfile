@@ -79,7 +79,16 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to Kubernetes') {
+        stage('Deploy App on k8s') {
+            steps {
+                withCredentials([
+                    string(credentialsId: 'master-kube-cred', variable: 'api_token')
+                    ]) {
+                     sh 'kubectl --token $api_token --server https://192.168.49.2:8443  --insecure-skip-tls-verify=true apply -f nodejsapp.yaml '
+               }
+            }
+}
+        /*stage('Deploy to Kubernetes') {
             steps {
                 script {
                     // Kubernetes'e deploy et
@@ -88,7 +97,7 @@ pipeline {
                 }
             }
         }
-    }
+    }*/
     post {
         always {
             // İşlem sonrası temizlik
