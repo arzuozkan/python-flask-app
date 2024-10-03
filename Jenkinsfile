@@ -84,9 +84,18 @@ pipeline {
                 withCredentials([
                     string(credentialsId: 'master-kube-cred', variable: 'api_token')
                     ]) {
-                    sh 'kubectl --token $api_token --server https://192.168.49.2:8443  --insecure-skip-tls-verify=true apply -f deployment.yaml '
-                    sh 'kubectl --token $api_token --server https://192.168.49.2:8443  --insecure-skip-tls-verify=true apply -f service.yaml '
-
+                    sh '''
+                    curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"
+                    chmod u+x ./kubectl
+                    export KUBECONFIG=$(mktemp)
+                    ./kubectl config set-cluster do-fra1-ibb-tech --server=https://192.168.49.2:8443 --insecure-skip-tls-verify=true
+                    ./kubectl config set-credentials jenkins --token=${KUBE_TOKEN}
+                    ./kubectl config set-context default --cluster=do-fra1-ibb-tech --user=jenkins --namespace=default
+                    ./kubectl config use-context default
+                    ./kubectl get nodes
+                    ./kubectl apply -f service.yaml
+                    ./kubectl apply -f deployment.yaml
+                    '''
                }
             }
         }
