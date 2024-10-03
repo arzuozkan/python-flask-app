@@ -82,7 +82,7 @@ pipeline {
         stage('Deploy App on k8s') {
             steps {
                 withCredentials([
-                    string(credentialsId: 'master-kube-cred', variable: 'api_token')
+                    string(credentialsId: 'master-kube-cred', variable: 'KUBE_TOKEN')
                     ]) {
                     sh '''
                     curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"
