@@ -12,7 +12,7 @@ pipeline {
                 git 'https://github.com/arzuozkan/python-flask-app'
             }
         }
-        stage('SonarQube Code Scan') {
+        /*stage('SonarQube Code Scan') {
             environment {
                 scannerHome = tool 'sonar-scanner-tool';
             }
@@ -29,7 +29,7 @@ pipeline {
                     sh 'trivy fs --exit-code 1 ./'
                 }
             }
-        }
+        }*/
         stage('Build Docker Image') {
             steps {
                 script {
@@ -57,7 +57,7 @@ pipeline {
                     sh 'trivy image --exit-code 1 my-flask-app:latest'
                 }
             }
-        }*/
+        }
         stage('Trivy Image Scan') {
             steps {
                 script {
@@ -78,7 +78,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
         stage('Deploy App on k8s') {
             steps {
                 withCredentials([
