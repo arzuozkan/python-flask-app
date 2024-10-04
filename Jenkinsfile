@@ -82,7 +82,7 @@ pipeline {
         stage('Deploy App on k8s') {
             steps {
                 withCredentials([
-                    string(credentialsId: 'minikube-cred-token', variable:'api_token')
+                    string(credentialsId: 'my_kubernetes', variable:'api_token')
                     ]) {
                     sh '''
                     kubectl --token $api_token --server https://192.168.49.2:8443 --insecure-skip-tls-verify=true apply -f flask-app.yaml
