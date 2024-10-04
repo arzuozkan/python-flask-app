@@ -12,7 +12,7 @@ pipeline {
                 git 'https://github.com/arzuozkan/python-flask-app'
             }
         }
-        /*stage('SonarQube Code Scan') {
+        stage('SonarQube Code Scan') {
             environment {
                 scannerHome = tool 'sonar-scanner-tool';
             }
@@ -22,7 +22,7 @@ pipeline {
               }
             }
         }
-        stage('Trivy Source Code Scan') {
+        /*stage('Trivy Source Code Scan') {
             steps {
                 // Trivy ile kaynak kod güvenlik taraması (misconfiguration)
                 script {
@@ -38,7 +38,7 @@ pipeline {
                 }
             }
         }
-        /*stage('Push to Docker Hub') {
+        stage('Push to Docker Hub') {
             steps {
                 echo 'Pushing to Docker Hub'
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
@@ -50,7 +50,7 @@ pipeline {
                 }
             }
         }
-        stage('Trivy Image Scan') {
+        /*stage('Trivy Image Scan') {
             steps {
                 // Trivy ile imaj taraması
                 script {
