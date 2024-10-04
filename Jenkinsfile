@@ -82,18 +82,11 @@ pipeline {
         stage('Deploy App on k8s') {
             steps {
                 withCredentials([
-                    string(credentialsId: 'master-kube-cred', variable: 'KUBE_TOKEN')
+                    string(credentialsId: 'minikube-cred-token', variable:'api_token')
                     ]) {
                     sh '''
-                    curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"
-                    chmod u+x ./kubectl
-                    export KUBECONFIG=$(mktemp)
-                    ./kubectl config set-cluster do-fra1-ibb-tech --server=https://192.168.49.2:8443 --insecure-skip-tls-verify=true
-                    ./kubectl config set-credentials jenkins --token=${KUBE_TOKEN}
-                    ./kubectl config set-context default --cluster=do-fra1-ibb-tech --user=jenkins --namespace=default
-                    ./kubectl config use-context default
-                    ./kubectl apply -f service.yaml
-                    ./kubectl apply -f deployment.yaml
+                    kubectl --token $api_token --server https://192.168.49.2:8443 --insecure-skip-tls-verify=true apply -f k8s/deployment.yaml
+                    kubectl --token $api_token --server https://192.168.49.2:8443 --insecure-skip-tls-verify=true apply -f k8s/service.yaml
                     '''
                }
             }
