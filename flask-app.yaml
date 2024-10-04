@@ -30,5 +30,7 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 5000
-  type: LoadBalancer
+      nodePort: 30111  # 30000-32767 aralığında bir NodePort seçin
+  type: NodePort
+
 ---
