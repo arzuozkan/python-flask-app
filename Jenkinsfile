@@ -22,14 +22,14 @@ pipeline {
               }
             }
         }
-        /*stage('Trivy Source Code Scan') {
+        stage('Trivy Source Code Scan') {
             steps {
                 // Trivy ile kaynak kod güvenlik taraması (misconfiguration)
                 script {
                     sh 'trivy fs --exit-code 1 ./'
                 }
             }
-        }*/
+        }
         stage('Build Docker Image') {
             steps {
                 script {
@@ -57,7 +57,7 @@ pipeline {
                     sh 'trivy image --exit-code 1 my-flask-app:latest'
                 }
             }
-        }
+        }*/
         stage('Trivy Image Scan') {
             steps {
                 script {
@@ -78,7 +78,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
         stage('Deploy App on k8s') {
             steps {
                 withCredentials([
